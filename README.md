@@ -1,8 +1,12 @@
 # Ventral API
 
-![pnpm](https://img.shields.io/badge/pnpm-powered-blueviolet)
-![Node](https://img.shields.io/badge/node-%3E%3D%2018.0.0-green)
-![License](https://img.shields.io/badge/license-MIT-yellow)
+![pnpm](https://img.shields.io/badge/pnpm-10.15.0-blueviolet)
+![Node](https://img.shields.io/badge/node-%3E%3D18-green)
+![License](https://img.shields.io/badge/license-ISC-yellow)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)
+![Express](https://img.shields.io/badge/Express-5-lightgrey)
+![Prisma](https://img.shields.io/badge/Prisma-6.18.0-2D3748)
+![Zod](https://img.shields.io/badge/Zod-4.1-blue)
 
 Ventral API is the backend service for the Ventral Android application built with Kotlin Jetpack.  
 This API provides secure and scalable endpoints to handle user authentication, event data, and core application logic.
