@@ -31,7 +31,7 @@ Designed using a feature-based modular architecture, Ventral API focuses on main
     ```bash
     pnpm prisma generate
 
-4. Make sure your .env file is ready
+4. Make sure your ```.env``` file is ready
 
 5. Migrate database (make sure your DB server is ready)
     ```bash
