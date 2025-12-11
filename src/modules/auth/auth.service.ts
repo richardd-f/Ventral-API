@@ -1,24 +1,36 @@
+import { email } from "zod";
 import { User } from "../../../generated/prisma";
 import prisma from "../../config/prisma";
 import { ResponseError } from "../../errors/response-error";
+import { generateToken } from "../../utils/jwt.util";
 import { LoginInput, RegisterInput } from "./auth.validation";
 import bcrypt from "bcrypt";
 
-
-
 export class AuthService{
-
     static async login(data: LoginInput): Promise<string>{
-        const user = prisma.user.create({
-            data:{
-                email: data.email,
-                password: data.password
+        const user = prisma.user.findFirst({
+            where:{
+                email: data.email
             }
         });
-        return "";
+
+        if(!user){
+            throw new ResponseError(400, "Invalid email or password");
+        }
+
+        const isPasswordValid = await bcrypt.compare(data.password, user.password);
+        if(!isPasswordValid){
+            throw new ResponseError(400, "Invalid email or password");
+        }
+
+        return generateToken({
+            id: user.id,
+            name: user.name,
+            email: user.email
+        });
     }
 
-    static async register(data: RegisterInput): Promise<User>{
+    static async register(data: RegisterInput): Promise<string>{
         
         // Check if email already exists
         const email = await prisma.user.findUnique({
@@ -33,7 +45,6 @@ export class AuthService{
         // Encrypt password
         data.password = await bcrypt.hash(data.password, 10);
 
-
         const user = prisma.user.create({
             data:{
                 name: data.name,
@@ -46,7 +57,12 @@ export class AuthService{
                 current_education: data.current_education
             }
         });
-        return user;
+
+        return generateToken({
+            id:user.id, 
+            name: user.name, 
+            email: user.email
+        });
     }
 
 }
