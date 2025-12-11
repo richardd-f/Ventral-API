@@ -25,14 +25,14 @@ enum EventStatus {
 
 model User {
   user_id            String               @id @default(cuid())
-  name               String?
+  name               String
   email              String               @unique
   password           String
-  phone              String?
-  bio                String?
-  img_url            String?
-  date_of_birth      DateTime?
-  current_education  String?
+  phone              String
+  bio                String
+  img_url            String
+  date_of_birth      DateTime
+  current_education  String
   isAdmin            Boolean              @default(false)
 
   events             Event[]              @relation("UserEvents")
