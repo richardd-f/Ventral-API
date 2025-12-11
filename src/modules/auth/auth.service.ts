@@ -2,6 +2,8 @@ import { User } from "../../../generated/prisma";
 import prisma from "../../config/prisma";
 import { ResponseError } from "../../errors/response-error";
 import { LoginInput, RegisterInput } from "./auth.validation";
+import bcrypt from "bcrypt";
+
 
 
 export class AuthService{
@@ -29,7 +31,7 @@ export class AuthService{
         }
 
         // Encrypt password
-        data.password = await bcrypt
+        data.password = await bcrypt.hash(data.password, 10);
 
 
         const user = prisma.user.create({
