@@ -16,11 +16,14 @@ Designed using a feature-based modular architecture, Ventral API focuses on main
 ---
 
 ## Installation
-1. Use pnpm as package manager (if you never use pnpm before)
+1. Clone repository
+    ```bash
+    git clone https://github.com/richardd-f/Ventral-API.git
+2. Use pnpm as package manager (if you never use pnpm before)
     ```bash
     npm install -g pnpm
 
-2. Install all dependencies
+3. Install all dependencies
     ```bash
     pnpm i
 
@@ -28,11 +31,13 @@ Designed using a feature-based modular architecture, Ventral API focuses on main
     ```bash
     pnpm prisma generate
 
-4. Migrate database (make sure your DB server is ready)
+4. Make sure your .env file is ready
+
+5. Migrate database (make sure your DB server is ready)
     ```bash
     pnpm prisma migrate dev
 
-5. Done
+6. DONE
 
 ## Usage
 1. run
