@@ -24,7 +24,15 @@ Designed using a feature-based modular architecture, Ventral API focuses on main
     ```bash
     pnpm i
 
-3. Done
+3. Generate prisma model
+    ```bash
+    pnpm prisma generate
+
+4. Migrate database (make sure your DB server is ready)
+    ```bash
+    pnpm prisma migrate dev
+
+5. Done
 
 ## Usage
 1. run
