@@ -1,6 +1,6 @@
 
 export interface UserJWTPayload {
-    id: number
+    id: string
     name: string
     email: string
 };

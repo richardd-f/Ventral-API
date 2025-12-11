@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  // output   = "../generated/prisma"
 }
 
 datasource db {
@@ -31,7 +31,7 @@ model User {
   phone              String
   bio                String
   img_url            String
-  date_of_birth      DateTime
+  date_of_birth      DateTime             @db.Date
   current_education  String
   isAdmin            Boolean              @default(false)
 

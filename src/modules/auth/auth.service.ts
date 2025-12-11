@@ -8,7 +8,7 @@ import bcrypt from "bcrypt";
 
 export class AuthService{
     static async login(data: LoginInput): Promise<string>{
-        const user = prisma.user.findFirst({
+        const user = await prisma.user.findFirst({
             where:{
                 email: data.email
             }
@@ -24,7 +24,7 @@ export class AuthService{
         }
 
         return generateToken({
-            id: user.id,
+            id: user.user_id,
             name: user.name,
             email: user.email
         });
@@ -45,7 +45,7 @@ export class AuthService{
         // Encrypt password
         data.password = await bcrypt.hash(data.password, 10);
 
-        const user = prisma.user.create({
+        const user =  await prisma.user.create({
             data:{
                 name: data.name,
                 email: data.email,
@@ -53,13 +53,13 @@ export class AuthService{
                 phone: data.phone,
                 bio: data.bio,
                 img_url: data.img_url,
-                date_of_birth: data.date_of_birth,
+                date_of_birth: new Date(data.date_of_birth),
                 current_education: data.current_education
             }
         });
 
         return generateToken({
-            id:user.id, 
+            id:user.user_id, 
             name: user.name, 
             email: user.email
         });
