@@ -3,7 +3,7 @@ import { User } from "../../../generated/prisma";
 import prisma from "../../config/prisma";
 import { ResponseError } from "../../errors/response-error";
 import { generateToken } from "../../utils/jwt.util";
-import { LoginInput, RegisterInput } from "./auth.validation";
+import { LoginInput, RegisterInput } from "./validation";
 import bcrypt from "bcrypt";
 
 export class AuthService{
@@ -54,7 +54,6 @@ export class AuthService{
                 bio: data.bio,
                 img_url: data.img_url,
                 date_of_birth: new Date(data.date_of_birth),
-                current_education: data.current_education
             }
         });
 

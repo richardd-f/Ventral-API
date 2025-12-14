@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express"
-import { ZodError } from "zod"
+import { success, ZodError } from "zod"
 import { ResponseError } from "../errors/response-error"
 
 
@@ -10,25 +10,28 @@ export const errorMiddleware = async (
     next: NextFunction
 ) => {
     if (error instanceof ZodError) {
+        // Extract just the message strings and join them
+        // Example result: "Invalid email address, Password is too short"
+        const errorMessage = error.issues.map((issue) => issue.message).join(', ');
+
         return res.status(400).json({
-            status: "error",
+            success: false,
             message: "Validation error",
-            errors: error.issues.map((err) => ({
-                field: err.path.join("."),
-                message: err.message,
-            })),
+            errors: errorMessage,
         });
     }
 
     if (error instanceof ResponseError) {
         return res.status(error.status).json({
-            status: "error",
-            message: error.message,
+            success: false,
+            message: "Service error",
+            errors: error.message,
         });
     }
 
     return res.status(500).json({
-        status: "error",
-        message: error.message,
+        success: false,
+        message: "Server error",
+        errors: error.message,
     });
 };

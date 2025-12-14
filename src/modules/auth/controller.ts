@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { loginSchema, registerSchema } from "./auth.validation";
-import { AuthService } from "./auth.service";
+import { loginSchema, registerSchema } from "./validation";
+import { AuthService } from "./service";
+import { success } from "zod";
 
 export class AuthController{
 
@@ -9,6 +10,7 @@ export class AuthController{
             const validatedData = loginSchema.parse(req.body);
             const token = await AuthService.login(validatedData);
             res.status(200).json({
+                success: true,
                 message: "Login succesfully",
                 data: token
             });
@@ -22,6 +24,7 @@ export class AuthController{
             const validatedData = registerSchema.parse(req.body);
             const token = await AuthService.register(validatedData);
             res.status(201).json({
+                success: true,
                 message: "Register succesfully",
                 data: token
             });

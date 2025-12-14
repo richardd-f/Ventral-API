@@ -32,12 +32,12 @@ export const registerSchema = z.object({
 
     phone: z
         .string()
-        .min(10, "Phone number must be at least 10 digits long")
+        .min(7, "Phone number must be at least 10 digits long")
         .max(14, "Phone number must be at most 14 digits long"),
 
     bio: z
         .string()
-        .min(10, "Bio must be at least 10 characters long")
+        .min(1, "Bio is required")
         .max(300, "Bio must be at most 300 characters long"),
     
     img_url: z
@@ -48,11 +48,7 @@ export const registerSchema = z.object({
     date_of_birth: z
         .string()
         .min(10, "Date of birth is required")
-        .date("Date of birth must be in YYYY-MM-DD format"),
-
-    current_education: z
-        .string()
-        .min(2, "Current education must be at least 2 characters long")    
+        .date("Date of birth must be in YYYY-MM-DD format")
 
 });
 export type RegisterInput = z.infer<typeof registerSchema>;

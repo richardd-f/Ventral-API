@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken"
 import { JWT_SECRET_KEY } from "./env.util"
-import { UserJWTPayload } from "../modules/auth/auth.interface"
+import { UserJWTPayload } from "../modules/auth/interface"
 import { StringValue } from "ms"
 
 export function generateToken(
