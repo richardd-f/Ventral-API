@@ -1,6 +1,7 @@
 import express from 'express'
 import { errorMiddleware } from './middlewares/error-middleware'
 import { authRoute } from './modules/auth/route';
+import { eventRoute } from './modules/event/route';
 
 const app = express()
 
@@ -11,6 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // --- API Routes ---
 app.use('/api', authRoute);
+app.use('/api', eventRoute);
 
 
 // --- Health Check ---
