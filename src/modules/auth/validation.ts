@@ -32,7 +32,7 @@ export const registerSchema = z.object({
 
     phone: z
         .string()
-        .min(7, "Phone number must be at least 10 digits long")
+        .min(7, "Phone number must be at least 10 digits long") 
         .max(14, "Phone number must be at most 14 digits long"),
 
     bio: z

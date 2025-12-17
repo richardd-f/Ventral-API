@@ -1,5 +1,3 @@
-import { email } from "zod";
-import { User } from "../../../generated/prisma";
 import prisma from "../../config/prisma";
 import { ResponseError } from "../../errors/response-error";
 import { generateToken } from "../../utils/jwt.util";

@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { loginSchema, registerSchema } from "./validation";
 import { AuthService } from "./service";
-import { success } from "zod";
 
 export class AuthController{
 
