@@ -2,9 +2,9 @@ import { NextFunction, Request, Response } from "express";
 import { verifyToken } from "../utils/jwt.util";
 import { ResponseError } from "../errors/response-error";
 import { UserJWTPayload } from "../modules/auth/interface";
-import { UserResponse } from "../types/auth";
+import { UserRequest } from "../types/auth";
 
-export const authMiddleware = async (req: UserResponse, res: Response, next: NextFunction) => {
+export const authMiddleware = async (req: UserRequest, res: Response, next: NextFunction) => {
     const authHeader = req.get('Authorization');
 
     if (!authHeader) {

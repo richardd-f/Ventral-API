@@ -2,11 +2,11 @@ import { NextFunction, Request, Response } from "express";
 import { createEventSchema, updateEventSchema } from "./validation";
 import { EventService } from "./service";
 import { ResponseError } from "../../errors/response-error";
-import { UserResponse } from "../../types/auth";
+import { UserRequest } from "../../types/auth";
 
 export class EventController {
 
-    static async createEvent(req: UserResponse, res: Response, next: NextFunction) {
+    static async createEvent(req: UserRequest, res: Response, next: NextFunction) {
         try {
             const validatedData = createEventSchema.parse(req.body);
             const userId = req.user!.id;
@@ -23,7 +23,7 @@ export class EventController {
     }
 
     // support partial update (patch)
-    static async updateEvent(req: UserResponse, res: Response, next: NextFunction) {
+    static async updateEvent(req: UserRequest, res: Response, next: NextFunction) {
         try {
             const { eventId } = req.params;
             if(!eventId) throw new ResponseError(400, "Event ID is required");
@@ -40,7 +40,7 @@ export class EventController {
         }
     }
 
-    static async getEventByUserId(req: UserResponse, res: Response, next: NextFunction) {
+    static async getEventByUserId(req: UserRequest, res: Response, next: NextFunction) {
         try {
             const { userId } = req.params;
             if(!userId) throw new ResponseError(400, "User ID is required");
@@ -55,7 +55,7 @@ export class EventController {
         }
     }
 
-    static async getAllEvent(req: UserResponse, res: Response, next: NextFunction) {
+    static async getAllEvent(req: UserRequest, res: Response, next: NextFunction) {
         try {
             const events = await EventService.getAllEvent();
             res.status(200).json({
@@ -68,7 +68,7 @@ export class EventController {
         }
     }
 
-    static async deleteEvent(req: UserResponse, res: Response, next: NextFunction) {
+    static async deleteEvent(req: UserRequest, res: Response, next: NextFunction) {
         try {
             const { eventId } = req.params;
             if(!eventId) throw new ResponseError(400, "Event ID is required");

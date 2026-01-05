@@ -5,6 +5,15 @@ import { ResponseError } from "../../errors/response-error";
 
 export class EventService {
     static async createEvent(data: CreateEventInput, userId: string): Promise<Event> {
+        // 1. Check if an event with this name already exists
+        const existingEvent = await prisma.event.findUnique({
+            where: { name: data.name }
+        });
+
+        if (existingEvent) {
+            throw new ResponseError(400, "Event name is already registered");
+        }
+
         return await prisma.event.create({
             data: {
                 author_id: userId,
@@ -14,7 +23,20 @@ export class EventService {
                 date_end: new Date(data.date_end),
                 price: data.price,
                 ...(data.quota !== undefined && { quota: data.quota }),
-                status: data.status ? data.status as EventStatus : EventStatus.OPEN
+                status: data.status ? (data.status as EventStatus) : EventStatus.OPEN
+            },
+            include: {
+                images: true,
+                categories: {
+                    include: { category: true }
+                },
+                _count: {
+                    select: {
+                        applications: true,
+                        likes: true,
+                        dislikes: true
+                    }
+                }
             }
         });
     }
@@ -35,8 +57,44 @@ export class EventService {
 
         return await prisma.event.update({
             where: { event_id: eventId },
-            data: updateData
+            data: updateData,
+            include: {
+                images: true,
+                categories: {
+                    include: { category: true }
+                },
+                _count: {
+                    select: {
+                        applications: true,
+                        likes: true,
+                        dislikes: true
+                    }
+                }
+            }
         });
+    }
+
+    static async getEventById(eventId: string): Promise<Event> {
+        const event = await prisma.event.findUnique({
+            where: { event_id: eventId },
+            include: {
+                images: true,
+                categories: {
+                    include: { category: true }
+                },
+                _count: {
+                    select: {
+                        applications: true,
+                        likes: true,
+                        dislikes: true
+                    }
+                }
+            }
+        });
+        if(!event){
+            throw new ResponseError(404, "Event not found");
+        }
+        return event;
     }
 
     static async getEventByUserId(userId: string): Promise<Event[]> {
@@ -47,6 +105,13 @@ export class EventService {
                 images: true,
                 categories: {
                     include: { category: true }
+                },
+                _count: {
+                    select: {
+                        applications: true,
+                        likes: true,
+                        dislikes: true
+                    }
                 }
             }
         });
@@ -55,7 +120,20 @@ export class EventService {
     static async getAllEvent(): Promise<Event[]> {
         return await prisma.event.findMany({
             where: { status: EventStatus.OPEN }, // Typically we only show open events
-            orderBy: { date_start: 'asc' }
+            orderBy: { date_start: 'asc' },
+            include: {
+                images: true,
+                categories: {
+                    include: { category: true }
+                },
+                _count: {
+                    select: {
+                        applications: true,
+                        likes: true,
+                        dislikes: true
+                    }
+                }
+            }
         });
     }
 
