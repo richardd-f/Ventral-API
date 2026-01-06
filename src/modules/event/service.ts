@@ -23,7 +23,14 @@ export class EventService {
                 date_end: new Date(data.date_end),
                 price: data.price,
                 ...(data.quota !== undefined && { quota: data.quota }),
-                status: data.status ? (data.status as EventStatus) : EventStatus.OPEN
+                status: data.status ? (data.status as EventStatus) : EventStatus.OPEN,
+                ...(data.images && data.images.length > 0 && {
+                    images: {
+                        create: data.images.map((url) => ({
+                            img_url: url
+                        }))
+                    }
+                })
             },
             include: {
                 images: true,

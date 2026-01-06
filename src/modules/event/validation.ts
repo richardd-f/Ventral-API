@@ -27,7 +27,11 @@ export const createEventSchema = z.object({
         .optional(),
         
     status: z
-        .enum(["OPEN", "CLOSED", "SUSPENDED"])
+        .enum(["OPEN", "CLOSED", "SUSPENDED"]),
+    
+    images: z
+        .array(z.url())
+        .optional(),
 });
 
 export type CreateEventInput = z.infer<typeof createEventSchema>;
