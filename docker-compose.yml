@@ -1,4 +1,6 @@
 services:
+  migrate:
+    command: "pnpm prisma migrate deploy"
   api:
     build:
       context: .
