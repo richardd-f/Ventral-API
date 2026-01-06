@@ -28,7 +28,7 @@ RUN pnpm run build
 FROM node:22-alpine AS runner
 
 WORKDIR /app
-ENV NODE_ENV=production
+# ENV NODE_ENV=production
 
 # Install pnpm in runner stage as well
 RUN npm install -g pnpm
