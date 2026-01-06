@@ -31,9 +31,6 @@ COPY prisma ./prisma/
 
 RUN pnpm install --prod --frozen-lockfile
 
-# 🔑 regenerate prisma client HERE
-ENV DATABASE_URL="postgresql://dummy:dummy@dummy:5432/dummy"
-RUN pnpm exec prisma generate
 
 COPY --from=builder /app/dist ./dist
 
