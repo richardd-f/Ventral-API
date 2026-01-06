@@ -15,7 +15,7 @@ COPY prisma ./prisma/
 
 # Install all dependencies
 RUN pnpm install --frozen-lockfile
-ENV DATABASE_URL="postgresql://postgres:12345678@localhost:/asdfg"
+ENV DATABASE_URL="postgresql://postgres:12345678@localhost:5432/asdfg"
 
 # Copy source code
 COPY . .
