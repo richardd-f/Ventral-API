@@ -33,6 +33,8 @@ WORKDIR /app
 # Install pnpm in runner stage as well
 RUN npm install -g pnpm
 
+RUN pnpm config set production false
+
 # Only copy production dependencies and built files
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/node_modules ./node_modules
