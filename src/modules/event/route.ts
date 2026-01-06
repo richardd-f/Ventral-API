@@ -4,6 +4,7 @@ import { authMiddleware } from "../../middlewares/auth-middleware";
 
 export const EventRoutes: Router = Router();
 
+EventRoutes.get("/events/categories", EventController.getEventCategories); // Get event categories
 EventRoutes.get("/events/user/:userId", EventController.getEventByUserId); // Get events by user
 EventRoutes.get("/events", EventController.getAllEvent); // Get all events
 

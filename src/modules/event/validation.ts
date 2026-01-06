@@ -32,6 +32,10 @@ export const createEventSchema = z.object({
     images: z
         .array(z.url())
         .optional(),
+    
+    categories: z
+        .array(z.string())
+        .optional(),
 });
 
 export type CreateEventInput = z.infer<typeof createEventSchema>;

@@ -30,6 +30,13 @@ export class EventService {
                             img_url: url
                         }))
                     }
+                }),
+                ...(data.categories && data.categories.length > 0 && {
+                    categories: {
+                        create: data.categories.map((categoryId) => ({
+                            category_id: categoryId
+                        }))
+                    }
                 })
             },
             include: {
@@ -164,5 +171,8 @@ export class EventService {
             success: true,
             message: `Event ${eventId} deleted`
         };
+    }
+    static async getEventCategories() {
+        return await prisma.category.findMany();
     }
 }

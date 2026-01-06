@@ -81,4 +81,17 @@ export class EventController {
             next(err);
         }
     }
+    
+    static async getEventCategories(req: Request, res: Response, next: NextFunction) {
+        try {
+            const categories = await EventService.getEventCategories();
+            res.status(200).json({
+                success: true,
+                message: "Event categories retrieved successfully",
+                data: categories
+            });
+        } catch (err) {
+            next(err);
+        }
+    }
 }
