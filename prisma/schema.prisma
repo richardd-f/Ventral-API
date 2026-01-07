@@ -64,7 +64,7 @@ model UserVerification {
   address             String
   residential_address String
   current_education   String
-  status              UserVerificationStatus
+  status              UserVerificationStatus @default(PENDING)
 
   user User @relation(fields: [user_id], references: [user_id])
 }
