@@ -221,4 +221,68 @@ export class EventService {
             }
         });
     }
+
+    static async getAppliedEvent(userId: string) {
+        return await prisma.event.findMany({
+            where: {
+                applications: {
+                    some: {
+                        user_id: userId
+                    }
+                }
+            },
+            include: {
+                images: true,
+                categories: {
+                    include: { category: true }
+                },
+                _count: {
+                    select: {
+                        applications: true,
+                        likes: true,
+                        dislikes: true
+                    }
+                }
+            }
+        });
+    }
+
+    static async deleteApplication(userId: string, eventId: string) {
+        const application = await prisma.application.findFirst({
+            where: {
+                user_id: userId,
+                event_id: eventId
+            }
+        });
+
+        if (!application) {
+            throw new ResponseError(404, "Application not found");
+        }
+
+        return await prisma.application.delete({
+            where: {
+                application_id: application.application_id
+            }
+        });
+    }
+
+    static async getEventStatus(userId: string, eventId: string) {
+        const [isUserLike, isUserDislike, isApplied] = await Promise.all([
+            prisma.eventLike.findFirst({
+                where: { user_id: userId, event_id: eventId }
+            }),
+            prisma.eventDislike.findFirst({
+                where: { user_id: userId, event_id: eventId }
+            }),
+            prisma.application.findFirst({
+                where: { user_id: userId, event_id: eventId }
+            })
+        ]);
+
+        return {
+            isUserLike: !!isUserLike,
+            isUserDislike: !!isUserDislike,
+            isApplied: !!isApplied
+        };
+    }
 }
