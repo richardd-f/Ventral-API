@@ -11,6 +11,7 @@ datasource db {
 // -------------- ENUMS -----------------
 
 enum UserVerificationStatus {
+  PENDING
   VERIFIED
   REJECTED
 }
