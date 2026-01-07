@@ -175,4 +175,50 @@ export class EventService {
     static async getEventCategories() {
         return await prisma.category.findMany();
     }
+
+    static async applicateEvent(userId: string, eventId: string) {
+        // 1. Check if event exists
+        const event = await prisma.event.findUnique({
+            where: { event_id: eventId }
+        });
+
+        if (!event) {
+            throw new ResponseError(404, "Event not found");
+        }
+
+        // 2. Check if event is open
+        if (event.status !== EventStatus.OPEN) {
+            throw new ResponseError(400, "Event is not open for registration");
+        }
+
+        // 3. Check if user already applied
+        const existingApplication = await prisma.application.findFirst({
+            where: {
+                user_id: userId,
+                event_id: eventId
+            }
+        });
+
+        if (existingApplication) {
+            throw new ResponseError(400, "User already registered for this event");
+        }
+
+        // 4. Check quota
+        if (event.quota !== null) {
+            const currentApplications = await prisma.application.count({
+                where: { event_id: eventId }
+            });
+
+            if (currentApplications >= event.quota) {
+                throw new ResponseError(400, "Event quota reached");
+            }
+        }
+
+        return await prisma.application.create({
+            data: {
+                user_id: userId,
+                event_id: eventId
+            }
+        });
+    }
 }

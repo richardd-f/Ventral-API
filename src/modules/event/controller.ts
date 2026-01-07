@@ -94,4 +94,22 @@ export class EventController {
             next(err);
         }
     }
+
+    static async applicateEvent(req: UserRequest, res: Response, next: NextFunction) {
+        try {
+            const { eventId } = req.params;
+            const userId = req.user!.id;
+
+            if(!eventId) throw new ResponseError(400, "Event ID is required");
+
+            const application = await EventService.applicateEvent(userId, eventId);
+            res.status(201).json({
+                success: true,
+                message: "Successfully registered for event",
+                data: application
+            });
+        } catch (err) {
+            next(err);
+        }
+    }
 }
