@@ -22,6 +22,8 @@ export class EventService {
                 date_start: new Date(data.date_start),
                 date_end: new Date(data.date_end),
                 price: data.price,
+                address: data.address,
+                city: data.city,
                 ...(data.quota !== undefined && { quota: data.quota }),
                 status: data.status ? (data.status as EventStatus) : EventStatus.OPEN,
                 ...(data.images && data.images.length > 0 && {
@@ -56,6 +58,7 @@ export class EventService {
     }
 
     static async updateEvent(eventId: string, data: UpdateEventInput): Promise<Event> {
+        // first get event for check images and categories
         const event = await prisma.event.findUnique({
             where: { event_id: eventId },
             include: {
@@ -73,7 +76,7 @@ export class EventService {
         if (data.date_end) updateData.date_end = new Date(data.date_end);
         if (data.quota !== undefined) updateData.quota = data.quota;
 
-        // Clean up fields that shouldn't be directly updated in the 'data' object
+        // clear images and categories from update data, because the handler is different
         delete updateData.images;
         delete updateData.categories;
 

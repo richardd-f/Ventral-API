@@ -28,6 +28,14 @@ export const createEventSchema = z.object({
         
     status: z
         .enum(["OPEN", "CLOSED", "SUSPENDED"]),
+
+    address: z
+        .string()
+        .min(1, "Address is required"),
+    
+    city: z
+        .string()
+        .min(1, "City is required"),
     
     images: z
         .array(z.url())
