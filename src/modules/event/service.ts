@@ -57,7 +57,11 @@ export class EventService {
 
     static async updateEvent(eventId: string, data: UpdateEventInput): Promise<Event> {
         const event = await prisma.event.findUnique({
-            where: { event_id: eventId }
+            where: { event_id: eventId },
+            include: {
+                images: true,
+                categories: true
+            }
         });
 
         if (!event) {
@@ -69,22 +73,79 @@ export class EventService {
         if (data.date_end) updateData.date_end = new Date(data.date_end);
         if (data.quota !== undefined) updateData.quota = data.quota;
 
-        return await prisma.event.update({
-            where: { event_id: eventId },
-            data: updateData,
-            include: {
-                images: true,
-                categories: {
-                    include: { category: true }
-                },
-                _count: {
-                    select: {
-                        applications: true,
-                        likes: true,
-                        dislikes: true
+        // Clean up fields that shouldn't be directly updated in the 'data' object
+        delete updateData.images;
+        delete updateData.categories;
+
+        return await prisma.$transaction(async (tx) => {
+            // 1. Sync Images
+            if (data.images) {
+                const currentImages = event.images.map(img => img.img_url);
+                const newImages = data.images;
+
+                // Delete images not in the new list
+                await tx.imageEvent.deleteMany({
+                    where: {
+                        event_id: eventId,
+                        img_url: { notIn: newImages }
                     }
+                });
+
+                // Create images that are new
+                const imagesToCreate = newImages.filter(url => !currentImages.includes(url));
+                if (imagesToCreate.length > 0) {
+                    await tx.imageEvent.createMany({
+                        data: imagesToCreate.map(url => ({
+                            event_id: eventId,
+                            img_url: url
+                        }))
+                    });
                 }
             }
+
+            // 2. Sync Categories
+            if (data.categories) {
+                const currentCategoryIds = event.categories.map(cat => cat.category_id);
+                const newCategoryIds = data.categories;
+
+                // Delete categories not in the new list
+                await tx.eventCategory.deleteMany({
+                    where: {
+                        event_id: eventId,
+                        category_id: { notIn: newCategoryIds }
+                    }
+                });
+
+                // Create categories that are new
+                const categoriesToCreate = newCategoryIds.filter(id => !currentCategoryIds.includes(id));
+                if (categoriesToCreate.length > 0) {
+                    await tx.eventCategory.createMany({
+                        data: categoriesToCreate.map(id => ({
+                            event_id: eventId,
+                            category_id: id
+                        }))
+                    });
+                }
+            }
+
+            // 3. Update main event details
+            return await tx.event.update({
+                where: { event_id: eventId },
+                data: updateData,
+                include: {
+                    images: true,
+                    categories: {
+                        include: { category: true }
+                    },
+                    _count: {
+                        select: {
+                            applications: true,
+                            likes: true,
+                            dislikes: true
+                        }
+                    }
+                }
+            });
         });
     }
 
