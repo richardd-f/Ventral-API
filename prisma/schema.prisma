@@ -66,7 +66,7 @@ model UserVerification {
   current_education   String
   status              UserVerificationStatus @default(PENDING)
 
-  user User @relation(fields: [user_id], references: [user_id])
+  user User @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
 }
 
 model Application {
@@ -75,8 +75,8 @@ model Application {
   event_id       String
   timestamp      DateTime @default(now())
 
-  user  User  @relation(fields: [user_id], references: [user_id])
-  event Event @relation(fields: [event_id], references: [event_id])
+  user  User  @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  event Event @relation(fields: [event_id], references: [event_id], onDelete: Cascade)
 }
 
 model Comment {
@@ -85,8 +85,8 @@ model Comment {
   user_id  String
   content  String
 
-  user  User  @relation(fields: [user_id], references: [user_id])
-  event Event @relation(fields: [event_id], references: [event_id])
+  user  User  @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  event Event @relation(fields: [event_id], references: [event_id], onDelete: Cascade)
 }
 
 model EventLike {
@@ -94,8 +94,8 @@ model EventLike {
   user_id  String
   event_id String
 
-  user  User  @relation(fields: [user_id], references: [user_id])
-  event Event @relation(fields: [event_id], references: [event_id])
+  user  User  @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  event Event @relation(fields: [event_id], references: [event_id], onDelete: Cascade)
 }
 
 model EventDislike {
@@ -103,8 +103,8 @@ model EventDislike {
   user_id  String
   event_id String
 
-  user  User  @relation(fields: [user_id], references: [user_id])
-  event Event @relation(fields: [event_id], references: [event_id])
+  user  User  @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  event Event @relation(fields: [event_id], references: [event_id], onDelete: Cascade)
 }
 
 model Event {
@@ -120,7 +120,7 @@ model Event {
   address     String?
   city        String?
 
-  author       User            @relation("UserEvents", fields: [author_id], references: [user_id])
+  author       User            @relation("UserEvents", fields: [author_id], references: [user_id], onDelete: Cascade)
   comments     Comment[]
   likes        EventLike[]
   dislikes     EventDislike[]
@@ -150,8 +150,8 @@ model EventCategory {
   event_id    String
   category_id String
 
-  event    Event    @relation(fields: [event_id], references: [event_id])
-  category Category @relation(fields: [category_id], references: [category_id])
+  event    Event    @relation(fields: [event_id], references: [event_id], onDelete: Cascade)
+  category Category @relation(fields: [category_id], references: [category_id], onDelete: Cascade)
 }
 
 model UserCategoryFollow {
@@ -159,6 +159,6 @@ model UserCategoryFollow {
   user_id     String
   category_id String
 
-  user     User     @relation(fields: [user_id], references: [user_id])
-  category Category @relation(fields: [category_id], references: [category_id])
+  user     User     @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  category Category @relation(fields: [category_id], references: [category_id], onDelete: Cascade)
 }
