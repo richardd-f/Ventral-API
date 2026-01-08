@@ -1,6 +1,5 @@
 -- AlterEnum
 ALTER TYPE "UserVerificationStatus" ADD VALUE 'PENDING';
-COMMIT;
 
 -- DropForeignKey
 ALTER TABLE "ImageEvent" DROP CONSTRAINT "ImageEvent_event_id_fkey";
