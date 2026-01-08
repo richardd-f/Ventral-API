@@ -75,7 +75,8 @@ export class EventController {
             await EventService.deleteEvent(req.user!.id, eventId);
             res.status(200).json({
                 success: true,
-                message: "Event deleted successfully"
+                message: "Event deleted successfully",
+                data: "event deleted successfully"
             });
         } catch (err) {
             next(err);
