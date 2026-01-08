@@ -134,7 +134,7 @@ model ImageEvent {
   event_id      String
   img_url       String
 
-  event Event @relation(fields: [event_id], references: [event_id])
+  event Event @relation(fields: [event_id], references: [event_id], onDelete: Cascade)
 }
 
 model Category {
